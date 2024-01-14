@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body>
+<h1>Create a new post</h1>
+
+<form method="post" action="/posts">
+
+
+        <p>
+            <label for="id_title">Title</label>
+
+            <input type="text" name="title" id="id_title" maxlength="300" required autofocus value="">
+        </p>
+
+
+
+        <p>
+            <label for="id_published_at">
+                Publication date (format e.g. 2006-01-30)
+                <span id="set-today"></span>
+                <span id="set-empty"></span>
+            </label>
+
+            <input type="text" name="published" value="true" />
+            <span class="helptext">Leave blank to keep as draft/unpublished. Use a future date for auto-posting.</span>
+        </p>
+
+
+        <p>
+            <label for="id_body">Content (<a href="/guides/markdown/">supports markdown</a>) <span id="js-status"></span></label>
+
+            <textarea name="body" id="id_body" cols="60" rows="20" style="min-height: 200px; height: calc(100vh - 450px);"></textarea>
+            <span class="helptext" id="js-show" style="display: none;">Attach images by dragging & dropping.</span>
+        </p>
+
+        <input type="hidden" name="csrfmiddlewaretoken" value="yJ1pByhS4D3EQkhxfk0691WfVSemM9JdExxnrANnIcQ1gNd7g2NihIf7JON5o4l3">
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>

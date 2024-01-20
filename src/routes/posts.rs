@@ -32,6 +32,7 @@ impl NewPostForm {
 
 pub async fn new() -> impl IntoResponse {
     let template = NewPostTemplate {};
+
     match template.render() {
         Ok(html) => Ok(Html(html)),
         Err(_) => Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR),

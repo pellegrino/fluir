@@ -1,4 +1,7 @@
 extern crate diesel;
+use std::net::SocketAddr;
+use tokio::net::TcpListener;
+use tower_livereload::LiveReloadLayer;
 
 use crate::app::app;
 use dotenv::dotenv;
@@ -13,12 +16,18 @@ mod utils;
 async fn main() {
     dotenv().ok();
 
+    tracing_subscriber::fmt::init();
+
     let pool = utils::db::establish_connection();
 
     // Build our application with a single route
-    let app = app(pool);
+    let app = app(pool).layer(LiveReloadLayer::new());
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    println!("Listening on {}", listener.local_addr().unwrap());
+    // let adddr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let listener = TcpListener::bind(addr).await.unwrap();
+
+    println!("listening on {}", addr);
+
     axum::serve(listener, app).await.unwrap();
 }

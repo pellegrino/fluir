@@ -1,9 +1,12 @@
-use askama::Template;
+use crate::AppState;
+use axum::extract::State;
 use axum::{
     response::{Html, IntoResponse},
     Extension,
 };
 use diesel::prelude::*;
+use std::sync::Arc;
+use tera::Context;
 
 use crate::models::post::Post;
 use crate::utils::db::{get_connection, Pool}; // Import your Post model
@@ -21,7 +24,10 @@ fn get_latest_posts(conn: &mut PgConnection) -> QueryResult<Vec<Post>> {
 
 // Home page route handler
 
-pub async fn index(Extension(pool): Extension<Pool>) -> impl IntoResponse {
+pub async fn index(
+    State(state): State<Arc<AppState>>,
+    Extension(pool): Extension<Pool>,
+) -> impl IntoResponse {
     let mut conn = match get_connection(&pool) {
         Ok(conn) => conn,
         Err(_) => return Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR),
@@ -31,6 +37,9 @@ pub async fn index(Extension(pool): Extension<Pool>) -> impl IntoResponse {
         Ok(posts) => posts,
         Err(_) => return Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR),
     };
+
+    let mut context = Context::new();
+    context.insert("posts", posts);
 
     let template = IndexTemplate { posts };
 

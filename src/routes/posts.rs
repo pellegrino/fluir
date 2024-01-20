@@ -1,17 +1,16 @@
-use askama::Template;
+use crate::AppState;
+use axum::extract::State;
 use axum::response::{Form, Html, IntoResponse, Redirect};
 use axum::Extension;
 use diesel::associations::HasTable;
 use diesel::insert_into;
 use diesel::prelude::*;
 use serde::Deserialize;
+use std::sync::Arc;
+use tera::Context;
 
 use crate::schema::posts;
 use crate::utils::db::{get_connection, Pool};
-
-#[derive(Template)]
-#[template(path = "posts/new.html")]
-struct NewPostTemplate {}
 
 #[derive(Deserialize, Insertable, Debug)]
 #[diesel(table_name = posts)]
@@ -30,13 +29,18 @@ impl NewPostForm {
     }
 }
 
-pub async fn new() -> impl IntoResponse {
-    let template = NewPostTemplate {};
+pub async fn new(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let mut context = Context::new();
+    context.insert("name", "World");
 
-    match template.render() {
-        Ok(html) => Ok(Html(html)),
-        Err(_) => Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR),
-    }
+    let home = state.tera.render("posts/new.html", &context).unwrap();
+
+    let mut context = Context::new();
+    context.insert("view", &home);
+    context.insert("with_footer", &true);
+
+    let rendered = state.tera.render("views/main.html", &context).unwrap();
+    Html(rendered)
 }
 
 pub async fn create(

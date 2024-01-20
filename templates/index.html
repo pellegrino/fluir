@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Posts</title>
-    <script src="https://unpkg.com/htmx.org"></script>
+    <link rel="stylesheet" href="/assets/output.css"/>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+            integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
 </head>
+
 <body>
-<h1>Blog Posts</h1>
+{% include "components/header.html" %}
+<main class="pt-[60px]">
+    {{ view | safe }}
+</main>
 
-
-{% for post in posts %}
-<div class="post">
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.body }}</p>
-</div>
-{% endfor %}
-
+{% if with_footer %}
+{% include "components/footer.html" %}
+{% endif %}
 </body>
-</html>

@@ -22,8 +22,6 @@ async fn main() {
 
     // Build our application with a single route
     let app = app(pool).layer(LiveReloadLayer::new());
-
-    // let adddr = SocketAddr::from(([0, 0, 0, 0], 3000));
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     let listener = TcpListener::bind(addr).await.unwrap();
 

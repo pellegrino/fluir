@@ -10,6 +10,7 @@ use crate::utils::db::{get_connection, Pool}; // Import your Post model
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
+    title: &'static str,
     posts: Vec<Post>,
 }
 
@@ -32,7 +33,10 @@ pub async fn index(Extension(pool): Extension<Pool>) -> impl IntoResponse {
         Err(_) => return Err(axum::http::StatusCode::INTERNAL_SERVER_ERROR),
     };
 
-    let template = IndexTemplate { posts };
+    let template = IndexTemplate {
+        title: "Welcome to my blog",
+        posts,
+    };
 
     match template.render() {
         Ok(html) => Ok(Html(html)),

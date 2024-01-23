@@ -7,9 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: moonrepo/setup-rust@v1
+      - name: Stable with rustfmt and clippy
+        uses: actions-rs/toolchain@v1
         with:
-          components: rustfmt
+          profile: minimal
+          toolchain: stable
+          components: rustfmt, clippy
       - name: Check formatting
         run: cargo fmt --all --check
   lint:
@@ -17,10 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: moonrepo/setup-rust@v1
+      - name: Stable with rustfmt and clippy
+        uses: actions-rs/toolchain@v1
         with:
-          bins: cargo-make
-          components: clippy
+          profile: minimal
+          toolchain: stable
+          components: rustfmt, clippy
       - name: Run linter
         run: cargo make lint
   test:
@@ -28,8 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: moonrepo/setup-rust@v1
+      - name: Stable with rustfmt and clippy
+        uses: actions-rs/toolchain@v1
         with:
-          bins: cargo-make, cargo-nextest
+          profile: minimal
+          toolchain: stable
+          components: rustfmt, clippy
       - name: Run tests
         run: cargo make test

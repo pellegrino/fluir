@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Stable with rustfmt and clippy
-        uses: crusty-pie/toolchain@v1
+        uses: https://github.com/crusty-pie/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Stable with rustfmt and clippy
-        uses: crusty-pie/toolchain@v1
+        uses: https://github.com/crusty-pie/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Stable with rustfmt and clippy
-        uses: crusty-pie/toolchain@v1
+        uses: https://github.com/crusty-pie/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
